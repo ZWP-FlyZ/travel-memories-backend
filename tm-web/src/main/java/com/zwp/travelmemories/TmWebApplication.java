@@ -13,6 +13,6 @@ public class TmWebApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        TestWebApp.dosome();
+//        TestWebApp.dosome();
     }
 }
