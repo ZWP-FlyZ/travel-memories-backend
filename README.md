@@ -18,15 +18,25 @@
 
 ### 1.环境
 
-- JDK 1.8+
-- MAVEN 3.6.0+
-- MySQL 8.0+
-- SpringBoot 2.2.1+
+> - JDK 1.8+
+> - MAVEN 3.6.0+
+> - MySQL 8.0+
+> - SpringBoot 2.2.1+
 
 ### 2.编译
 
-- 清除 mvn clean
-- 构建 mvn build
+- 清除 `mvn clean`
+- 构建 `mvn build`
+
+## 三、数据库设计
+
+当前版本[**数据库设计**](./script/tm_db_design.sql)的EER关系图如下：<br/>
+
+![EER关系图](picture/database_EERv1.0.png)
+
+---
+
+
 
 
 
