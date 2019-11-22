@@ -2,15 +2,28 @@
 
 ## 一、项目结构
 
-### 1.父模块 travelmemories
 
-### 2.子模块 tm-comm
+### 项目模块结构如下：
 
-### 3.子模块 tm-repo
+```
+tm
+|
+|--  tm-comm
+|--  tm-repo
+|--  tm-service
+|--  tm-web        
+```
 
-### 4.子模块 tm-service
+### 各个模块功能
 
-### 5.子模块 tm-web
+* **tm** ：项目父模块，可在依赖中更新子模块版本，切换开发版本和发布版本配置。
+    * [**tm-comm**](./tm-comm/README.md)：各模块的公共模块，提供工具和通用数据类。
+    * [**tm-repo**](./tm-repo/README.md)：与各种数据源交互提供对外数据访问的子模块。
+    * [**tm-service**](./tm-service/README.md)：提供各种服务，完成义务部分的子模块。
+    * [**tm-web**](./tm-web/README.md)：实现控制层相关代码的子模块。
+                 
+
+
 
 ---
 
@@ -27,6 +40,7 @@
 
 - 清除 `mvn clean`
 - 构建 `mvn build`
+- jar运行包位置 `tm-web/target/tm-web-xxx.jar`
 
 ## 三、数据库设计
 
