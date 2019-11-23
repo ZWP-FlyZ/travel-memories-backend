@@ -1,4 +1,4 @@
-package com.zwp.travelmemories;
+package com.zwp.travelmemories.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

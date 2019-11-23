@@ -1,4 +1,4 @@
-package com.zwp.travelmemories;
+package com.zwp.travelmemories.web;
 
 import com.zwp.travelmemories.repo.TestRepo;
 import com.zwp.travelmemories.service.TestService;

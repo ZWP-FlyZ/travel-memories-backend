@@ -1,6 +1,6 @@
-package com.zwp.travelmemories.controller;
+package com.zwp.travelmemories.web.controller;
 
-import com.zwp.travelmemories.TestWebApp;
+import com.zwp.travelmemories.web.TestWebApp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
