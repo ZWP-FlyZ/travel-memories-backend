@@ -29,7 +29,15 @@ public class UnAuthorizedHandler implements AuthenticationEntryPoint {
     private final static Logger LOGGER = LoggerFactory.getLogger(UnAuthorizedHandler.class);
 
     @Value("${c-version}")
-    public String version;
+    String version;
+
+    final byte[] errMsg;
+
+    public UnAuthorizedHandler(){
+        ResponseResult res = new ResponseResult(ResponseCodes.UNAUTHORIZED,
+                "用户未登录",null);
+        errMsg = GsonUtils.toJson(res).getBytes();
+    }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
@@ -37,13 +45,8 @@ public class UnAuthorizedHandler implements AuthenticationEntryPoint {
         LOGGER.info("unauthorized->username:[{}],ip:[{}],port:[{}]",
                 request.getParameter("username"),request.getRemoteHost(),request.getRemotePort());
 
-        // 设置通信版本号
-        response.addHeader(Gkeys.C_VERSION_NAME,version);
-
         try(OutputStream os = response.getOutputStream()) {
-            ResponseResult res = new ResponseResult(ResponseCodes.UNAUTHORIZED,
-                    "用户未登录",null);
-            os.write(GsonUtils.toJson(res).getBytes());
+            os.write(errMsg);
             os.flush();
         }
 

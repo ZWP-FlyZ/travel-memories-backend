@@ -29,6 +29,14 @@ public class RequestAccessDeniedHandler implements AccessDeniedHandler {
     @Value("${c-version}")
     public String version;
 
+    private final byte[] errMsg ;
+
+    public RequestAccessDeniedHandler(){
+        ResponseResult res = new ResponseResult(ResponseCodes.PERMISSION_DENIED,
+                "用户访问受限资源",null);
+        errMsg = GsonUtils.toJson(res).getBytes();
+    }
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException e) throws IOException, ServletException {
@@ -36,13 +44,9 @@ public class RequestAccessDeniedHandler implements AccessDeniedHandler {
         LOGGER.info("permission_denied->username:[{}],ip:[{}],port:[{}]",
                 request.getParameter("username"),request.getRemoteHost(),request.getRemotePort());
 
-        // 设置通信版本号
-        response.addHeader(Gkeys.C_VERSION_NAME,version);
         // 写入返回内容
         try(OutputStream os = response.getOutputStream()) {
-            ResponseResult res = new ResponseResult(ResponseCodes.PERMISSION_DENIED,
-                    "用户访问受限资源",null);
-            os.write(GsonUtils.toJson(res).getBytes());
+            os.write(errMsg);
             os.flush();
         }
 
