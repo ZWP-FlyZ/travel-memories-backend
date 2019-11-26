@@ -1,6 +1,7 @@
 package com.zwp.travelmemories.web.controller;
 
-import com.zwp.travelmemories.web.TestWebApp;
+import com.zwp.travelmemories.service.TestService;
+import com.zwp.travelmemories.web.vo.ResponseResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +22,10 @@ public class TestController {
 
     @GetMapping("/dosome")
     @ResponseBody
-    public String doTest(HttpServletRequest request){
-        TestWebApp.dosome();
-        return request.toString();
+    public ResponseResult doTest(HttpServletRequest request){
+
+        TestService.dosome();
+        return ResponseResult.success(request.toString());
     }
 
 }

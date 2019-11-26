@@ -36,6 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new TmPassEncoder();
     }
 
+    @Bean
+    public UnAuthorizedHandler unAuthorizedHandler(){
+        return new UnAuthorizedHandler();
+    }
+
+    @Bean
+    public RequestAccessDeniedHandler requestAccessDeniedHandler(){
+        return new RequestAccessDeniedHandler();
+    }
+
+
     /**
      * 配置http相关内容
      * @param http
@@ -62,7 +73,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     //认证成功后向控制层转发的域名
                     .successForwardUrl("/login")
                     // 认证失败时处理器
-                    .failureHandler(new LoginFailHandler())
+                    .failureForwardUrl("/login_failure")
+//                    .failureHandler(new LoginFailHandler())
                     //允许所有人（包括未登录人）都可以访问
                     .permitAll()
                     .and()
@@ -71,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 登录与访问时异常处理
         http.exceptionHandling()
-                .authenticationEntryPoint(new UnAuthorizedHandler())
-                .accessDeniedHandler(new RequestAccessDeniedHandler());
+                .authenticationEntryPoint(unAuthorizedHandler())
+                .accessDeniedHandler(requestAccessDeniedHandler());
     }
 }

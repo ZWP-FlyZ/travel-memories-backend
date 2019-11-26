@@ -1,7 +1,12 @@
 package com.zwp.travelmemories.web.security;
 
+import com.zwp.travelmemories.comm.utils.GsonUtils;
+import com.zwp.travelmemories.web.vo.Gkeys;
+import com.zwp.travelmemories.web.vo.ResponseCodes;
+import com.zwp.travelmemories.web.vo.ResponseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -9,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @program: travelmemories
@@ -20,9 +26,25 @@ import java.io.IOException;
 public class RequestAccessDeniedHandler implements AccessDeniedHandler {
     private final static Logger LOGGER = LoggerFactory.getLogger(RequestAccessDeniedHandler.class);
 
+    @Value("${c-version}")
+    public String version;
+
     @Override
-    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+    public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException e) throws IOException, ServletException {
-        LOGGER.debug("user denied "+e.getMessage());
+
+        LOGGER.info("permission_denied->username:[{}],ip:[{}],port:[{}]",
+                request.getParameter("username"),request.getRemoteHost(),request.getRemotePort());
+
+        // 设置通信版本号
+        response.addHeader(Gkeys.C_VERSION_NAME,version);
+        // 写入返回内容
+        try(OutputStream os = response.getOutputStream()) {
+            ResponseResult res = new ResponseResult(ResponseCodes.PERMISSION_DENIED,
+                    "用户访问受限资源",null);
+            os.write(GsonUtils.toJson(res).getBytes());
+            os.flush();
+        }
+
     }
 }
