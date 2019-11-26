@@ -1,6 +1,8 @@
 package com.zwp.travelmemories.service;
 
 import com.zwp.travelmemories.comm.vo.UserVo;
+import com.zwp.travelmemories.repo.mybatis.mappers.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,6 +15,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountService {
 
+
+    @Autowired
+    UserMapper userMapper;
+
     /**
      * 通过username获取到用户信息，专用于登录
      * @param username
@@ -23,13 +29,14 @@ public class AccountService {
 
         if(username==null) return null;
 
-        UserVo vo = new UserVo();
-        vo.setUId(123123123L);
-        vo.setUsername(username);
-        vo.setPassword("123456");
-        vo.setRoles("USER");
-        vo.setState(0);
-        return vo;
+//        UserVo vo = new UserVo();
+//        vo.setUId(123123123L);
+//        vo.setUsername(username);
+//        vo.setPassword("123456");
+//        vo.setRoles("USER");
+//        vo.setStatus(0);
+
+        return userMapper.selectUserByUsername(username);
     }
 
 

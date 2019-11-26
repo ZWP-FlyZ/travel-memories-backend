@@ -16,7 +16,7 @@ public class UserVo {
     private String username;
     private String password;
     private String roles;
-    private Integer state;
+    private Integer status;
     private Long regTime;
     private Long lastTime;//最后一次登录时间
 

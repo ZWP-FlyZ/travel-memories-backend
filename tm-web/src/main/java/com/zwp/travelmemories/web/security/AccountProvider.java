@@ -34,7 +34,6 @@ public class AccountProvider implements UserDetailsService {
             throw new UsernameNotFoundException("user ["+s+"] not founded");
 
         LOGGER.debug("Try to log in. user[{}] ,uid[{}] ",s,user.getUId());
-
         return UserDetailVo.from(user);
     }
 }

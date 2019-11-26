@@ -24,21 +24,21 @@ public class UserDetailVo implements UserDetails, Serializable {
     private Long uId;
     private String username;
     private String password;
-    private Integer state;
+    private Integer status;
     private List<GrantedAuthority> roles;
 
 
-    public UserDetailVo(Long uId,String username,String password,Integer state,String... roles){
+    public UserDetailVo(Long uId,String username,String password,Integer status,String... roles){
         Assert.notNull(uId,"the uid is null");
         Assert.notNull(username,"the username is null");
         Assert.notNull(password,"the password is null");
         Assert.notNull(roles,"the roles is null");
-        Assert.notNull(state,"the state is null");
+        Assert.notNull(status,"the status is null");
 
         this.uId = uId;
         this.username=username;
         this.password=password;
-        this.state=state;
+        this.status =status;
         this.roles= new ArrayList<>();
         // 装载角色
         Arrays.stream(roles).forEach(r->
@@ -51,7 +51,7 @@ public class UserDetailVo implements UserDetails, Serializable {
                 user.getUId(),
                 user.getUsername(),
                 user.getPassword(),
-                user.getState(),
+                user.getStatus(),
                 user.getRoles().split(",")
                 );
     }

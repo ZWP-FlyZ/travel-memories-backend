@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwp.travelmemories.repo.mybatis.mappers.UserMapper">
+
+
+    <resultMap id="userMap" type="com.zwp.travelmemories.comm.vo.UserVo">
+        <id column="u_id" property="uId"/>
+        <result column="u_name" property="username"/>
+        <result column="u_password" property="password"/>
+        <result column="u_role" property="roles"/>
+        <result column="u_status" property="status"/>
+        <result column="u_regtime" property="regTime"/>
+        <result column="u_lasttime" property="lastTime"/>
+    </resultMap>
+
+    <sql id="TABLE_NAME">user</sql>
+
+    <select id="selectUserByUsername" resultMap="userMap">
+        SELECT * FROM
+        <include refid="TABLE_NAME"/>
+        WHERE u_name = #{username} LIMIT 1
+    </select>
+
+<!--  添加用户并返回自动生成的id   -->
+    <insert id="insertUser" parameterType="com.zwp.travelmemories.comm.vo.UserVo"
+    keyColumn="u_id" keyProperty="uId" useGeneratedKeys="true">
+        INSERT IGNORE INTO
+        <include refid="TABLE_NAME"/>
+         (u_name, u_password,u_role,u_status,u_regtime,u_lasttime)
+         VALUES
+         (#{username},#{password},#{roles},#{status},#{regTime},#{lastTime})
+    </insert>
+
+
+</mapper>
+
