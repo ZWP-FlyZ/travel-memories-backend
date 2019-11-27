@@ -26,7 +26,7 @@ public interface UserMapper {
      * @param vo
      * @return
      */
-    Long insertUser(UserVo vo);
+    int insertUser(UserVo vo);
 
 
 

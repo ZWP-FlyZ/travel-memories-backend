@@ -36,6 +36,10 @@ public class ResponseResult<T> extends AbstractResponseResult {
         return new ResponseResult(ResponseCodes.OK,message,null);
     }
 
+    public static <T> ResponseResult success(T data){
+        return new ResponseResult(ResponseCodes.OK,data);
+    }
+
     /**
      * 返回一个成功的回应结果
      * @return
@@ -43,6 +47,8 @@ public class ResponseResult<T> extends AbstractResponseResult {
     public static ResponseResult success(){
         return new ResponseResult(ResponseCodes.OK,null);
     }
+
+
 
     public static ResponseResult failure(String message){
         return new ResponseResult(ResponseCodes.FAILURE,message,null);

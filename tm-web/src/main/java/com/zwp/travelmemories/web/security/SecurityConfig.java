@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //设置注册相关请求的设置
                 .authorizeRequests()
                     //选择注册的域名，并且允许所有人（包括未登录人）都可以访问
-                    .antMatchers("/reg/**").permitAll()
+                    .antMatchers("/logon").permitAll()
                     //所有已经登录的人（任意权限的人）都可以访问
                     .anyRequest().authenticated()
                     .and()

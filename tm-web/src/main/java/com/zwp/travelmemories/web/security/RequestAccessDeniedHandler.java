@@ -1,7 +1,6 @@
 package com.zwp.travelmemories.web.security;
 
 import com.zwp.travelmemories.comm.utils.GsonUtils;
-import com.zwp.travelmemories.web.vo.Gkeys;
 import com.zwp.travelmemories.web.vo.ResponseCodes;
 import com.zwp.travelmemories.web.vo.ResponseResult;
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ public class RequestAccessDeniedHandler implements AccessDeniedHandler {
 
         LOGGER.info("permission_denied->username:[{}],ip:[{}],port:[{}]",
                 request.getParameter("username"),request.getRemoteHost(),request.getRemotePort());
-
+        response.setHeader("Content-Type","application/json");
         // 写入返回内容
         try(OutputStream os = response.getOutputStream()) {
             os.write(errMsg);

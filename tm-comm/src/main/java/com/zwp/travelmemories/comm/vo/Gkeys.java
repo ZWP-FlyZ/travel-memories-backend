@@ -1,4 +1,4 @@
-package com.zwp.travelmemories.web.vo;
+package com.zwp.travelmemories.comm.vo;
 
 /**
  * @program: travelmemories
@@ -8,6 +8,8 @@ package com.zwp.travelmemories.web.vo;
  * @version: v1.0
  **/
 public class Gkeys {
+    // 通信版本HTTP头名字
     public final static String C_VERSION_NAME = "c-version";
+
 
 }

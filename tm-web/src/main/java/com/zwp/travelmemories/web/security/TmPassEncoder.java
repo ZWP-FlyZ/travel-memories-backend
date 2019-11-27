@@ -1,5 +1,6 @@
 package com.zwp.travelmemories.web.security;
 
+import com.zwp.travelmemories.comm.utils.EncryptionUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -12,12 +13,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class TmPassEncoder implements PasswordEncoder {
 
     @Override
-    public String encode(CharSequence charSequence) {
-        return charSequence.toString();
+    public String encode(CharSequence rawPassword) {
+        String salt = EncryptionUtils.salt();
+        String t = EncryptionUtils.encrypt(rawPassword.toString(),salt);
+        return t+EncryptionUtils.SALT_SPILT+salt;
     }
 
     @Override
-    public boolean matches(CharSequence charSequence, String s) {
-        return s.equals(charSequence);
+    public boolean matches(CharSequence rawPass, String encodedPass) {
+        String[] passSalt =  encodedPass.split(EncryptionUtils.SALT_SPILT);
+        if(passSalt.length!=2){
+            return rawPass.toString().equals(encodedPass);
+        }else{
+            String ec = EncryptionUtils.encrypt(rawPass.toString(),passSalt[1]);
+            return ec.equals(passSalt[0]);
+        }
     }
 }
