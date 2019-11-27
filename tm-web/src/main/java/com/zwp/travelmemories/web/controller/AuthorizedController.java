@@ -31,7 +31,7 @@ import java.io.Serializable;
  * @version: v1.0
  **/
 @RestController
-public class AuthorizedController {
+public class AuthorizedController extends BaseController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthorizedController.class);
 
@@ -56,9 +56,8 @@ public class AuthorizedController {
      */
     @PostMapping("/login")
     public ResponseResult<UserID> login(HttpServletRequest request){
-        Authentication aut =
-                SecurityContextHolder.getContext().getAuthentication();
-        UserDetailVo user = (UserDetailVo)aut.getPrincipal();
+
+        UserDetailVo user = getCurrentLoginUserInfo();
         try{
             // 登录成功后的操作
             LOGGER.info("login success->username:[{}],ip:[{}],port:[{}]",

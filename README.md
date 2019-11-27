@@ -44,9 +44,9 @@ tm
 
 ## 三、数据库设计
 
-当前版本[**数据库设计**](./script/tm_db_design.sql)的EER关系图如下：<br/>
+当前版本[**数据库设计v1.2**](./script/db_design_v1.2.sql)的EER关系图如下：<br/>
 
-![EER关系图](picture/database_EERv1.0.png)
+![EER关系图v1.2](picture/db_eer_v1.2.png)
 
 ---
 

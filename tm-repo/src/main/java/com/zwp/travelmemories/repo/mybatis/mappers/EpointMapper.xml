@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwp.travelmemories.repo.mybatis.mappers.EpointMapper">
+
+
+    <resultMap id="epointMap" type="com.zwp.travelmemories.comm.vo.EpointVo">
+        <id column="ep_id" property="epId"/>
+        <result column="u_id" property="uId"/>
+        <result column="ep_title" property="epTitle"/>
+        <result column="ep_addr" property="epAddr"/>
+        <result column="ep_lng" property="epLng"/>
+        <result column="ep_lat" property="epLat"/>
+        <result column="ep_type" property="epType"/>
+        <result column="ep_time" property="epTime"/>
+        <result column="ep_cretime" property="epCreTime"/>
+        <result column="ep_status" property="epStatus"/>
+    </resultMap>
+
+    <sql id="TABLE_NAME">event_point</sql>
+
+    <select id="selectAllEpointByUid" resultMap="epointMap">
+        SELECT * FROM
+        <include refid="TABLE_NAME"/>
+        WHERE u_id = #{uId}
+    </select>
+
+    <!--  添加事件点并返回自动生成的id   -->
+    <insert id="insertEpoint" parameterType="com.zwp.travelmemories.comm.vo.EpointVo"
+            keyColumn="ep_id" keyProperty="epId" useGeneratedKeys="true">
+        INSERT INTO
+        <include refid="TABLE_NAME"/>
+        (u_id, ep_title,ep_addr,ep_lng,ep_lat,ep_type,ep_time,ep_cretime,ep_status)
+        VALUES
+        (#{uId},#{epTitle},#{epAddr},#{epLng},#{epLat},#{epType},
+        #{epTime}, #{epCreTime}, #{epStatus})
+    </insert>
+
+
+</mapper>
+

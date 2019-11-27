@@ -32,8 +32,10 @@ public enum ResponseCodes {
     // 事件点创建相关-130x
     EP_CREATE_FORMATTING_ERROR(1301,"信息格式不符合要求"),
 
-    // 事件点删除、更新操作通用部分-131x
+    // 事件点操作通用部分-131x
     EP_OP_FAILURE_LOCKED(1311,"事件点已锁定，操作失败"),
+    EP_OP_PERMISSION_DENIED(1312,"用户无权访问目标事件点"),
+
 
     // 事件点锁定与解锁-132x
     EP_LOCKED(1320,"事件点加锁成功"),
