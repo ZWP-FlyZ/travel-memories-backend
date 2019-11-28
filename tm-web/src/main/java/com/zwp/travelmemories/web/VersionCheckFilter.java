@@ -1,7 +1,7 @@
 package com.zwp.travelmemories.web;
 
 import com.zwp.travelmemories.comm.utils.GsonUtils;
-import com.zwp.travelmemories.comm.vo.Gkeys;
+import com.zwp.travelmemories.web.vo.Gkeys;
 import com.zwp.travelmemories.web.vo.ResponseCodes;
 import com.zwp.travelmemories.web.vo.ResponseResult;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package com.zwp.travelmemories.comm.vo;
+package com.zwp.travelmemories.web.vo;
 
 /**
  * @program: travelmemories
