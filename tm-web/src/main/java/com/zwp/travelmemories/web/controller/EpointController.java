@@ -81,10 +81,14 @@ public class EpointController extends BaseController{
             LOGGER.debug("user:[{}] uid:[{}] create epoints with error info {}",
                     user.getUsername(),user.getUid(),point);
         }else{
-            // 创建事件点成功
-            EpointVo vo = epointService.addEpoint(toEpointVo(point,user.getUid()));
 
-            rr = ResponseResult.success(new EpointID(vo.getEpId()));
+            EpointVo vo = epointService.addEpoint(toEpointVo(point,user.getUid()));
+            if(vo!=null)
+                // 创建事件点成功
+                rr = ResponseResult.success(new EpointID(vo.getEpId()));
+            else
+                // 创建事件点失败
+                rr = ResponseResult.failure();
         }
 
         return rr;

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwp.travelmemories.repo.mybatis.mappers.EpTextMapper">
+
+
+    <resultMap id="epointMap" type="com.zwp.travelmemories.comm.vo.EpTextInfoVo">
+        <id column="ep_ti_id" property="epTiId"/>
+        <result column="ep_id" property="epId"/>
+        <result column="u_id" property="uId"/>
+        <result column="ep_ti_lasttime" property="epTiLastTime"/>
+        <result column="ep_ti_text" property="epTiText"/>
+    </resultMap>
+
+    <sql id="TABLE_NAME">event_point_text_info</sql>
+
+    <select id="selectTextInfoByEpId" resultMap="epointMap">
+        SELECT * FROM
+        <include refid="TABLE_NAME"/>
+        WHERE ep_id = #{uId}
+    </select>
+
+    <!--  添加事件点并返回自动生成的id   -->
+    <insert id="replaceTextInfo" parameterType="com.zwp.travelmemories.comm.vo.EpTextInfoVo">
+        REPLACE  INTO
+        <include refid="TABLE_NAME"/>
+        (ep_id, u_id,ep_ti_lasttime,ep_ti_text)
+        VALUES
+        (#{epId},#{uId},#{epTiLastTime},#{epTiText})
+    </insert>
+
+</mapper>
+

@@ -1,5 +1,6 @@
 package com.zwp.travelmemories.repo;
 
+import com.zwp.travelmemories.repo.mybatis.mappers.EpTextMapper;
 import com.zwp.travelmemories.repo.mybatis.mappers.UserMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,14 @@ public class TmRepoApplication implements CommandLineRunner {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    EpTextMapper epTextMapper;
+
     @Override
     public void run(String... args) throws Exception {
 //        System.err.println(userMapper.selectUserByUsername("zwp"));
+
+
+
     }
 }
