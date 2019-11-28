@@ -1,5 +1,6 @@
 package com.zwp.travelmemories.web.controller;
 
+import com.zwp.travelmemories.comm.vo.EpTextInfoVo;
 import com.zwp.travelmemories.comm.vo.EpointVo;
 import com.zwp.travelmemories.service.EpointService;
 import com.zwp.travelmemories.web.vo.EpointCrtVo;
@@ -13,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -90,9 +88,60 @@ public class EpointController extends BaseController{
                 // 创建事件点失败
                 rr = ResponseResult.failure();
         }
+        return rr;
+    }
+
+
+    /**
+     * 获取事件点文本信息，当事件点文本信息不存在时，返回null
+     * @param request
+     * @param epId
+     * @return
+     */
+    @GetMapping("/get_textinfo")
+    @ResponseBody
+    public ResponseResult<EpTextInfoVo> getEpointTextInfo(HttpServletRequest request,
+                                                          Long epId){
+        UserDetailVo user = getCurrentLoginUserInfo();
+        ResponseResult<EpTextInfoVo> rr =
+                ResponseResult.success(epointService.getEpointTextInfo(epId,user.getUid()));
+        LOGGER.debug("user:[{}] uid:[{}] ask for epoint textInfo success. epId:[{}]",
+                user.getUsername(),user.getUid(),epId);
+        return rr;
+    }
+
+    @PostMapping("update_textinfo")
+    @ResponseBody
+    public ResponseResult updateTextInfo(HttpServletRequest request,
+                                         Long epId,
+                                         @RequestParam("text") String epTiText){
+        ResponseResult rr;
+        UserDetailVo user = getCurrentLoginUserInfo();
+        if(epTiText==null||epTiText.length()>1800){
+            // 更新文本信息失败，文本信息字符长度超限制
+            rr = new ResponseResult(ResponseCodes.EP_TI_FORMATTING_ERROR,null);
+            LOGGER.debug("update text info error. epTiText out of range.epTiText len="
+                    +epTiText.length());
+        }else{
+            EpTextInfoVo vo = toEpTextInfoVo(user.getUid(),epId,epTiText);
+            if(!epointService.updateEpointTextInfo(vo)){
+                LOGGER.debug("update text info error. unknown error.epId:[{}] uId:[{}]"
+                        ,epId,user.getUid());
+                rr = ResponseResult.failure("更新文本信息发生未知错误，请确认用户id和事件点id是否正常。");
+            }else{
+                rr = ResponseResult.success();
+                LOGGER.debug("update text info success. epId:[{}] uId:[{}]",epId,user.getUid());
+            }
+        }
 
         return rr;
     }
+
+
+
+
+
+
 
 
     @Data
@@ -112,9 +161,18 @@ public class EpointController extends BaseController{
         res.setEpCreTime(System.currentTimeMillis());
         res.setEpType(vo.getEpType());
         res.setEpStatus(0);
-
         return res;
     }
+
+    private EpTextInfoVo toEpTextInfoVo(Long uId,Long epId,String epTiText){
+        EpTextInfoVo vo = new EpTextInfoVo();
+        vo.setEpId(epId);
+        vo.setUId(uId);
+        vo.setEpTiLastTime(System.currentTimeMillis());
+        vo.setEpTiText(epTiText);
+        return vo;
+    }
+
 
 
 }

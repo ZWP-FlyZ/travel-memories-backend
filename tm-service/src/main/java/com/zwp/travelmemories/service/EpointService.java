@@ -59,8 +59,8 @@ public class EpointService {
      * @param epId
      * @return 当事件点的文本信息不存在返回null
      */
-    public EpTextInfoVo getEpointTextInfo(Long epId){
-        return epTextMapper.selectTextInfoByEpId(epId);
+    public EpTextInfoVo getEpointTextInfo(Long epId,Long uId){
+        return epTextMapper.selectTextInfoByEpId(epId,uId);
     }
 
     /**
@@ -82,7 +82,8 @@ public class EpointService {
                     epTextInfoVo.getEpId(),epTextInfoVo.getUId());
         }else{
             res=false;
-            LOGGER.debug("Update or Add EpointTextInfo failure.EpId:[{}],uId:[{}]",
+            LOGGER.debug("Update or Add EpointTextInfo failure.EpId:[{}],uId:[{}]" +
+                            " the ep may not be created by the user",
                     epTextInfoVo.getEpId(),epTextInfoVo.getUId());
         }
         return res;

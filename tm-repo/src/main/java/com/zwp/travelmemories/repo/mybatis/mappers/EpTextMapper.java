@@ -20,7 +20,8 @@ public interface EpTextMapper {
      * @param epId
      * @return
      */
-    EpTextInfoVo selectTextInfoByEpId(@Param("epId") Long epId);
+    EpTextInfoVo selectTextInfoByEpId(@Param("epId") Long epId,
+                                      @Param("uId") Long uId);
 
 
     /**
