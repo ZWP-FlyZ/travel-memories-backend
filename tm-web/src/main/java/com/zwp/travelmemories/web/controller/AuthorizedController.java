@@ -8,11 +8,9 @@ import com.zwp.travelmemories.web.vo.ResponseResult;
 import com.zwp.travelmemories.web.vo.UserDetailVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.Serializable;
 
 /**
  * @program: travelmemories
@@ -94,7 +91,7 @@ public class AuthorizedController extends BaseController {
         ResponseResult rr = null;
         if(ckResult.hasErrors()){
             //注册信息不合法
-            rr = new ResponseResult(ResponseCodes.LOGON_FORMATTING_ERROR,
+            rr = new ResponseResult(ResponseCodes.PARAM_FORMATTING_ERROR,
                     ckResult.getAllErrors().get(0).getDefaultMessage());
             LOGGER.debug("user {} logon failure. error info :"+
                     ckResult.getAllErrors().get(0).getDefaultMessage(),user.getUsername());

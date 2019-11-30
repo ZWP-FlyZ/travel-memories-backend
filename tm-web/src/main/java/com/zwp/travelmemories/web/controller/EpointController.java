@@ -43,19 +43,14 @@ public class EpointController extends BaseController{
      */
     @GetMapping("/getall")
     @ResponseBody
-    public ResponseResult<List<EpointVo>> getAllEpoint(HttpServletRequest request,Long uId){
+    public ResponseResult<List<EpointVo>> getAllEpoint(HttpServletRequest request){
         UserDetailVo user = getCurrentLoginUserInfo();
-        ResponseResult<List<EpointVo>> rr = null;
-        if(uId==null||!uId.equals(user.getUid())){
-            //访问不属于自己的事件点
-            rr = new ResponseResult<>(ResponseCodes.EP_OP_PERMISSION_DENIED,null);
-            LOGGER.debug("user:[{}] uid:[{}] ask for all epoints denied. target uid:[{}] ",
-                    user.getUsername(),user.getUid(),uId);
-        }else{
-            rr = ResponseResult.success(epointService.getAllEpointsByUid(uId));
-            LOGGER.debug("user:[{}] uid:[{}] ask for all epoints success. epoints count={} ",
-                    user.getUsername(),user.getUid(),rr.getData().size());
-        }
+
+        ResponseResult<List<EpointVo>> rr
+                = ResponseResult.success(epointService.getAllEpointsByUid(user.getUid()));
+        LOGGER.debug("user:[{}] uid:[{}] ask for all epoints success. epoints count={} ",
+                user.getUsername(),user.getUid(),rr.getData().size());
+
         return rr;
     }
 
@@ -75,7 +70,7 @@ public class EpointController extends BaseController{
         ResponseResult<EpointID> rr =null;
         if(result.hasErrors()){
             // 事件点有错误
-            rr = new ResponseResult<>(ResponseCodes.EP_CREATE_FORMATTING_ERROR,null);
+            rr = new ResponseResult<>(ResponseCodes.PARAM_FORMATTING_ERROR,null);
             LOGGER.debug("user:[{}] uid:[{}] create epoints with error info {}",
                     user.getUsername(),user.getUid(),point);
         }else{
@@ -86,7 +81,7 @@ public class EpointController extends BaseController{
                 rr = ResponseResult.success(new EpointID(vo.getEpId()));
             else
                 // 创建事件点失败
-                rr = ResponseResult.failure();
+                rr = ResponseResult.failure("创建用户失败");
         }
         return rr;
     }
@@ -119,7 +114,7 @@ public class EpointController extends BaseController{
         UserDetailVo user = getCurrentLoginUserInfo();
         if(epTiText==null||epTiText.length()>1800){
             // 更新文本信息失败，文本信息字符长度超限制
-            rr = new ResponseResult(ResponseCodes.EP_TI_FORMATTING_ERROR,null);
+            rr = new ResponseResult(ResponseCodes.PARAM_FORMATTING_ERROR,null);
             LOGGER.debug("update text info error. epTiText out of range.epTiText len="
                     +epTiText.length());
         }else{
@@ -127,7 +122,7 @@ public class EpointController extends BaseController{
             if(!epointService.updateEpointTextInfo(vo)){
                 LOGGER.debug("update text info error. unknown error.epId:[{}] uId:[{}]"
                         ,epId,user.getUid());
-                rr = ResponseResult.failure("更新文本信息发生未知错误，请确认用户id和事件点id是否正常。");
+                rr = ResponseResult.failure("更新文本信息发生错误，请确认用户是否已经创建事件点id。");
             }else{
                 rr = ResponseResult.success();
                 LOGGER.debug("update text info success. epId:[{}] uId:[{}]",epId,user.getUid());
@@ -136,12 +131,6 @@ public class EpointController extends BaseController{
 
         return rr;
     }
-
-
-
-
-
-
 
 
     @Data
