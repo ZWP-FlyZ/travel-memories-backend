@@ -21,12 +21,14 @@ public class TmPassEncoder implements PasswordEncoder {
 
     @Override
     public boolean matches(CharSequence rawPass, String encodedPass) {
+        if(rawPass==null||rawPass.toString().equals(""))
+            return false;
         String[] passSalt =  encodedPass.split(EncryptionUtils.SALT_SPILT);
-        if(passSalt.length!=2){
+        if(passSalt.length==1){
             return rawPass.toString().equals(encodedPass);
-        }else{
+        }else if(passSalt.length==2){
             String ec = EncryptionUtils.encrypt(rawPass.toString(),passSalt[1]);
             return ec.equals(passSalt[0]);
-        }
+        }else return false;
     }
 }
