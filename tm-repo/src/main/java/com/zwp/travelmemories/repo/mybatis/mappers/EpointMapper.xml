@@ -37,6 +37,16 @@
         #{epTime}, #{epCreTime}, #{epStatus})
     </insert>
 
+    <update id="updateEpoint" parameterType="com.zwp.travelmemories.comm.vo.EpointVo">
+        UPDATE <include refid="TABLE_NAME"/> SET
+        ep_title = #{epTitle},
+        ep_addr = #{epAddr},
+        ep_type = #{epType},
+        ep_time = #{epTime}
+        WHERE ep_id = #{epId} and u_id = #{uId}
+    </update>
+
+
 
 </mapper>
 

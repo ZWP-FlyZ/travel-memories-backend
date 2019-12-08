@@ -3,10 +3,7 @@ package com.zwp.travelmemories.web.controller;
 import com.zwp.travelmemories.comm.vo.EpTextInfoVo;
 import com.zwp.travelmemories.comm.vo.EpointVo;
 import com.zwp.travelmemories.service.EpointService;
-import com.zwp.travelmemories.web.vo.EpointCrtVo;
-import com.zwp.travelmemories.web.vo.ResponseCodes;
-import com.zwp.travelmemories.web.vo.ResponseResult;
-import com.zwp.travelmemories.web.vo.UserDetailVo;
+import com.zwp.travelmemories.web.vo.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.slf4j.Logger;
@@ -81,10 +78,40 @@ public class EpointController extends BaseController{
                 rr = ResponseResult.success(new EpointID(vo.getEpId()));
             else
                 // 创建事件点失败
-                rr = ResponseResult.failure("创建用户失败");
+                rr = ResponseResult.failure("创建事件点失败");
         }
         return rr;
     }
+
+    @PostMapping("/setting")
+    @ResponseBody
+    public ResponseResult updateEpoint(HttpServletRequest request,
+                                       @Valid EpointUpdVo point,
+                                       BindingResult result){
+        UserDetailVo user = getCurrentLoginUserInfo();
+        ResponseResult rr =null;
+        if(result.hasErrors()){
+            // 事件点属性有错误
+            rr = new ResponseResult<>(ResponseCodes.PARAM_FORMATTING_ERROR,null);
+            LOGGER.debug("user:[{}] uid:[{}] update epoints with error info {}",
+                    user.getUsername(),user.getUid(),point);
+        }else{
+            boolean res = epointService.updateEpoint(toEpointVo(point,user.getUid()));
+            if(res)
+                // 创建事件点成功
+                rr = ResponseResult.success();
+            else{
+                // 创建事件点失败
+                rr = ResponseResult.failure("更新属性点属性失败");
+                LOGGER.debug("user:[{}] uid:[{}] update epoints failure {}. 用户与事件点id不匹配.",
+                        user.getUsername(),user.getUid(),point);
+            }
+
+        }
+        return rr;
+    }
+
+
 
 
     /**
@@ -105,7 +132,7 @@ public class EpointController extends BaseController{
         return rr;
     }
 
-    @PostMapping("update_textinfo")
+    @PostMapping("/update_textinfo")
     @ResponseBody
     public ResponseResult updateTextInfo(HttpServletRequest request,
                                          Long epId,
@@ -148,6 +175,18 @@ public class EpointController extends BaseController{
         res.setEpLng(vo.getEpLng());
         res.setEpTime(vo.getEpTime());
         res.setEpCreTime(System.currentTimeMillis());
+        res.setEpType(vo.getEpType());
+        res.setEpStatus(0);
+        return res;
+    }
+
+    private EpointVo toEpointVo(EpointUpdVo vo,Long uId){
+        EpointVo res = new EpointVo();
+        res.setUId(uId);
+        res.setEpId(vo.getEpId());
+        res.setEpTitle(vo.getEpTitle());
+        res.setEpAddr(vo.getEpAddr());
+        res.setEpTime(vo.getEpTime());
         res.setEpType(vo.getEpType());
         res.setEpStatus(0);
         return res;

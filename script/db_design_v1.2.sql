@@ -61,7 +61,7 @@ ENGINE = InnoDB;
 -- Table `travel_memories`.`event_point_text_info`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `travel_memories`.`event_point_text_info` (
-  `ep_ti_id` INT(10) NOT NULL AUTO_INCREMENT COMMENT '事件点文本信息主键',
+  `ep_ti_id` INT(10) NOT NULL AUTO_INCREMENT COMMENT '事件点文本信息主键,注意这个主键会因为频繁更新用完',
   `ep_id` BIGINT(11) NOT NULL,
   `u_id` INT(10) NOT NULL,
   `ep_ti_lasttime` BIGINT(13) NOT NULL DEFAULT 0 COMMENT '最近更改时间',
@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `travel_memories`.`event_point_text_info` (
   PRIMARY KEY (`ep_ti_id`),
   INDEX `fk_event_point_text_info_user1_idx` (`u_id` ASC) VISIBLE,
   INDEX `fk_event_point_text_info_event_point1_idx` (`ep_id` ASC) VISIBLE,
+  UNIQUE INDEX `ep_id_UNIQUE` (`ep_id` ASC) VISIBLE,
   CONSTRAINT `fk_event_point_text_info_user1`
     FOREIGN KEY (`u_id`)
     REFERENCES `travel_memories`.`user` (`u_id`)

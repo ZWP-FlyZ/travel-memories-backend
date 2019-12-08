@@ -20,5 +20,6 @@ public interface EpointMapper {
 
     Integer insertEpoint(EpointVo point);
 
+    Integer updateEpoint(EpointVo point);
 
 }

@@ -63,6 +63,22 @@ public class EpointService {
         return epTextMapper.selectTextInfoByEpId(epId,uId);
     }
 
+
+    /**
+     * 更新事件点属性
+     * @param point
+     * @return 当更新成功时返回true,否则返回false
+     */
+    public boolean updateEpoint(EpointVo point){
+        if(point.getEpType()>2)
+            point.setEpType(2);
+        else if(point.getEpType()<0)
+            point.setEpType(0);
+        return epointMapper.updateEpoint(point)>0;
+    }
+
+
+
     /**
      * 更新事件点文本信息，如果原事件点文本信息不存在则创建
      * @param epTextInfoVo
