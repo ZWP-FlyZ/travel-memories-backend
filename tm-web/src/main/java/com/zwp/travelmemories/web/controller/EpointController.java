@@ -112,6 +112,28 @@ public class EpointController extends BaseController{
     }
 
 
+    @GetMapping("/delete")
+    @ResponseBody
+    public ResponseResult deleteEpoint(HttpServletRequest request,
+                                       Long epId){
+        UserDetailVo user = getCurrentLoginUserInfo();
+        ResponseResult rr =null;
+        boolean res = epointService.deleteEpoint(epId,user.getUid());
+        if(res) {
+            // 删除事件点成功
+            rr = ResponseResult.success();
+            LOGGER.debug("user:[{}] uid:[{}] delete epoints success epId:[{}]"
+                    ,user.getUsername(),user.getUid(),epId);
+        }
+        else{
+            // 创建事件点失败
+            rr = ResponseResult.failure("更新属性点属性失败");
+            LOGGER.debug("user:[{}] uid:[{}] update epoints failure epId:[{}]. 用户与事件点id不匹配.",
+                    user.getUsername(),user.getUid(),epId);
+        }
+        return rr;
+    }
+
 
 
     /**

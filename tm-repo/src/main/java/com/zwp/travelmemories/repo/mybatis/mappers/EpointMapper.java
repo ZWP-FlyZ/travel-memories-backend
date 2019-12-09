@@ -22,4 +22,6 @@ public interface EpointMapper {
 
     Integer updateEpoint(EpointVo point);
 
+    Integer updateEpointForDelete(@Param("epId")Long epId,@Param("uId")Long uId);
+
 }

@@ -78,6 +78,17 @@ public class EpointService {
     }
 
 
+    /**
+     * 删除某一个事件点内容
+     * @param epId 事件点id
+     * @param uId 用户id
+     * @return 删除成功放回true，否则返回false
+     */
+    public boolean deleteEpoint(Long epId,Long uId){
+        return epointMapper.updateEpointForDelete(epId,uId)>0;
+    }
+
+
 
     /**
      * 更新事件点文本信息，如果原事件点文本信息不存在则创建

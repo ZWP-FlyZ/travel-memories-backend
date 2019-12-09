@@ -20,10 +20,12 @@
 
     <sql id="TABLE_NAME">event_point</sql>
 
+    <sql id="DELETED_STATUS">-1</sql>
+
     <select id="selectAllEpointByUid" resultMap="epointMap">
         SELECT * FROM
         <include refid="TABLE_NAME"/>
-        WHERE u_id = #{uId}
+        WHERE u_id = #{uId} and ep_status > <include refid="DELETED_STATUS"/>
     </select>
 
     <!--  添加事件点并返回自动生成的id   -->
@@ -37,12 +39,18 @@
         #{epTime}, #{epCreTime}, #{epStatus})
     </insert>
 
-    <update id="updateEpoint" parameterType="com.zwp.travelmemories.comm.vo.EpointVo">
+    <update id="updateEpoint" >
         UPDATE <include refid="TABLE_NAME"/> SET
         ep_title = #{epTitle},
         ep_addr = #{epAddr},
         ep_type = #{epType},
         ep_time = #{epTime}
+        WHERE ep_id = #{epId} and u_id = #{uId}
+    </update>
+
+    <update id="updateEpointForDelete">
+        UPDATE <include refid="TABLE_NAME"/> SET
+        ep_status = <include refid="DELETED_STATUS"/>
         WHERE ep_id = #{epId} and u_id = #{uId}
     </update>
 
