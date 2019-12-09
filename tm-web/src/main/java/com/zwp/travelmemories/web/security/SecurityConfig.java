@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 /**
  * @program: travelmemories
@@ -46,6 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new RequestAccessDeniedHandler();
     }
 
+    @Bean
+    public LogoutSuccessHandlerImp logoutSuccessHandlerImp(){
+        return new LogoutSuccessHandlerImp();
+    }
 
     /**
      * 配置http相关内容
@@ -77,6 +82,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                    .failureHandler(new LoginFailHandler())
                     //允许所有人（包括未登录人）都可以访问
                     .permitAll()
+                    .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessHandler(logoutSuccessHandlerImp())
                     .and()
                 //其他基础配置
                 .httpBasic();
