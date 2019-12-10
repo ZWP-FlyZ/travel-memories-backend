@@ -41,9 +41,12 @@ public class LogoutSuccessHandlerImp implements LogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                                 Authentication authentication) throws IOException, ServletException {
         UserDetailVo user = (UserDetailVo)authentication.getPrincipal();
-        LOGGER.info("username:[{}],ip:[{}],port:[{}] logout success",
-                request.getParameter("username"),request.getRemoteHost(),
-                request.getRemotePort());
+        // user为null时，用户可能已经由于时间过长登出。
+        if(user!=null){
+            LOGGER.info("username:[{}],ip:[{}],port:[{}] logout success",
+                    request.getParameter("username"),request.getRemoteHost(),
+                    request.getRemotePort());
+        }
         response.setHeader("Content-Type","application/json");
         try(OutputStream os = response.getOutputStream()) {
             os.write(errMsg);

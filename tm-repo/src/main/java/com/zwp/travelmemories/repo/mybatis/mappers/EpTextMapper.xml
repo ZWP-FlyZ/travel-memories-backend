@@ -27,10 +27,8 @@
         <include refid="TABLE_NAME"/>
         (ep_id, u_id,ep_ti_lasttime,ep_ti_text)
         SELECT #{epId},#{uId},#{epTiLastTime},#{epTiText}
-        FROM DUAL
-        WHERE EXISTS
-        (SELECT ep_id FROM event_point
-        WHERE ep_id =#{epId} AND u_id = #{uId})
+        FROM event_point
+        WHERE ep_id =#{epId} AND u_id = #{uId}
     </insert>
 
 </mapper>

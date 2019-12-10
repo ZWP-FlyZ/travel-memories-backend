@@ -19,6 +19,8 @@ Integer insertUser(UserVo vo);
 * 事件点相关[EpointMapper](./src/main/java/com/zwp/travelmemories/repo/mybatis/mappers/EpointMapper.java)
 
 ```
-List<EpointVo> selectAllEpointByUid(Long uId);
-Integer insertEpoint(EpointVo point);
+    List<EpointVo> selectAllEpointByUid(@Param("uId") Long uId);
+    Integer insertEpoint(EpointVo point);
+    Integer updateEpoint(EpointVo point);
+    Integer updateEpointForDelete(@Param("epId")Long epId,@Param("uId")Long uId);
 ```
