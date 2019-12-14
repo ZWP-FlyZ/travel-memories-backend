@@ -12,6 +12,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
+import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,8 @@ public class StorageService {
      * @return
      * @throws IOException
      */
-    public boolean saveFile(String filename,Long uId,InputStream is)
+    public File saveFile(String filename,Long uId,InputStream is,
+                         boolean toPreview)
             throws IOException{
 
         Assert.notNull(filename, "filename is null");
@@ -62,9 +64,16 @@ public class StorageService {
         Path fp = p.resolve(filename);
         Files.createFile(fp);
         Files.copy(is, fp, StandardCopyOption.REPLACE_EXISTING);
-
-        return true;
+        if(toPreview){
+            Path preview = p.resolve("p-"+filename);
+            Thumbnails.of(fp.toFile()).
+                    scale(0.25).toFile(preview.toFile());
+        }
+        return fp.toFile();
     }
+
+
+
 
     /**
      *

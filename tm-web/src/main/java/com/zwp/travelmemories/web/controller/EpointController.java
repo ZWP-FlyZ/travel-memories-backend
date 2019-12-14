@@ -9,6 +9,8 @@ import com.zwp.travelmemories.service.StorageService;
 import com.zwp.travelmemories.web.vo.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import net.coobird.thumbnailator.Thumbnailator;
+import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -247,7 +250,7 @@ public class EpointController extends BaseController{
             if(epointService.addMediaInfo(info)){
                 // 更新数据库成功
                 try(InputStream is= file.getInputStream() ){
-                    storageService.saveFile(newFileName,user.getUid(),is);
+                    storageService.saveFile(newFileName,user.getUid(),is,true);
                 }
                 rr = ResponseResult.success();
             }else
