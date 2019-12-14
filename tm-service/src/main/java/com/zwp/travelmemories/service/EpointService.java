@@ -1,9 +1,11 @@
 package com.zwp.travelmemories.service;
 
+import com.zwp.travelmemories.comm.vo.EpMediaInfoVo;
 import com.zwp.travelmemories.comm.vo.EpTextInfoVo;
 import com.zwp.travelmemories.comm.vo.EpointVo;
 import com.zwp.travelmemories.repo.mybatis.mappers.EpTextMapper;
 import com.zwp.travelmemories.repo.mybatis.mappers.EpointMapper;
+import com.zwp.travelmemories.repo.mybatis.mappers.EpointMediaMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class EpointService {
 
     @Autowired
     EpTextMapper epTextMapper;
+
+    @Autowired
+    EpointMediaMapper epointMediaMapper;
 
     /**
      * 通过用户id查找所有事件点，
@@ -115,5 +120,28 @@ public class EpointService {
         }
         return res;
     }
+
+
+    /**
+     * 通过用户id和事件点id获取所有媒体信息
+     * @param uId
+     * @param epId
+     * @return 当无媒体信息时，返回空list
+     */
+    public List<EpMediaInfoVo> getAllMediaInfoByEpId(Long uId,Long epId){
+        return epointMediaMapper.selectMediaInfoByEpId(uId,epId);
+    }
+
+
+    /**
+     * 添加事件点id的媒体信息
+     * @param info
+     * @return
+     */
+    public boolean addMediaInfo(EpMediaInfoVo info){
+        return epointMediaMapper.insertMediaInfo(info)>0;
+    }
+
+
 
 }

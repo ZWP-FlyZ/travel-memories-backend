@@ -1,20 +1,33 @@
 package com.zwp.travelmemories.web.controller;
 
+import com.zwp.travelmemories.comm.utils.EncryptionUtils;
+import com.zwp.travelmemories.comm.vo.EpMediaInfoVo;
 import com.zwp.travelmemories.comm.vo.EpTextInfoVo;
 import com.zwp.travelmemories.comm.vo.EpointVo;
 import com.zwp.travelmemories.service.EpointService;
+import com.zwp.travelmemories.service.StorageService;
 import com.zwp.travelmemories.web.vo.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -33,6 +46,8 @@ public class EpointController extends BaseController{
     @Autowired
     EpointService epointService;
 
+    @Autowired
+    StorageService storageService;
 
     /**
      * 获取自身所有事件点信息
@@ -161,10 +176,10 @@ public class EpointController extends BaseController{
                                          @RequestParam("text") String epTiText){
         ResponseResult rr;
         UserDetailVo user = getCurrentLoginUserInfo();
-        if(epTiText==null||epTiText.length()>1800){
+        if(epId==null||epTiText==null||epTiText.length()>1800){
             // 更新文本信息失败，文本信息字符长度超限制
             rr = new ResponseResult(ResponseCodes.PARAM_FORMATTING_ERROR,null);
-            LOGGER.debug("update text info error. epTiText out of range.epTiText len="
+            LOGGER.debug("update text info error. epId is null or epTiText out of range.epTiText len="
                     +epTiText.length());
         }else{
             EpTextInfoVo vo = toEpTextInfoVo(user.getUid(),epId,epTiText);
@@ -181,6 +196,86 @@ public class EpointController extends BaseController{
         return rr;
     }
 
+    @GetMapping("/get_mediainfo")
+    @ResponseBody
+    public ResponseResult<List<EpMediaInfoVo>> getMediaInfoList(HttpServletRequest request,
+                                                                Long epId){
+        ResponseResult<List<EpMediaInfoVo>> rr=null;
+        UserDetailVo user = getCurrentLoginUserInfo();
+        if(epId==null){
+            rr = new ResponseResult(ResponseCodes.PARAM_FORMATTING_ERROR,null);
+            LOGGER.debug("getMediaInfoList error. epId is null or file is null");
+        }else{
+            List<EpMediaInfoVo> ret =
+                    epointService.getAllMediaInfoByEpId(user.getUid(),epId);
+            LOGGER.debug("getMediaInfoList success. uId:{} epId:{} ret.size:{}",
+                    user.getUid(),epId,ret.size());
+            rr = ResponseResult.success(ret);
+        }
+        return rr;
+    }
+
+
+    @PostMapping("/upload_mediainfo")
+    @ResponseBody
+    @Transactional
+    public ResponseResult<EpMediaInfoVo> uploadFile(HttpServletRequest request,
+                                                    Long epId,
+                                                    @RequestParam("file") MultipartFile file)
+                                                    throws IOException{
+        ResponseResult<EpMediaInfoVo> rr=null;
+        if(epId==null||file==null||file.isEmpty()){
+            rr = new ResponseResult(ResponseCodes.PARAM_FORMATTING_ERROR,null);
+            file.getInputStream().close();
+            LOGGER.debug("upload media info error. epId is null or file is null");
+        }else {
+            UserDetailVo user = getCurrentLoginUserInfo();
+            LOGGER.debug("uId:{} epId:{} filename:{} file-type:{} file-size:{}",
+                    user.getUid(),epId,
+                    file.getOriginalFilename(),
+                    file.getContentType(),
+                    file.getSize());
+            String newFileName = newFileName(user.getUid(),epId,
+                    file.getOriginalFilename());
+            EpMediaInfoVo info = new EpMediaInfoVo();
+            info.setEpId(epId);
+            info.setUId(user.getUid());
+            // 根据文件类型设置，这里暂定为0
+            info.setEpMiDesc("");
+            info.setEpMiType(0);
+            info.setEpMiPath(newFileName);
+            if(epointService.addMediaInfo(info)){
+                // 更新数据库成功
+                try(InputStream is= file.getInputStream() ){
+                    storageService.saveFile(newFileName,user.getUid(),is);
+                }
+                rr = ResponseResult.success();
+            }else
+                rr = ResponseResult.failure();
+            rr.setData(info);
+        }
+        return rr;
+    }
+
+    @GetMapping("/files/{filename:.+}")
+
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename)
+            throws FileNotFoundException {
+        UserDetailVo user = getCurrentLoginUserInfo();
+        ResponseEntity<Resource>  r=null;
+        Resource file = storageService.getFile(filename,user.getUid());
+        if(file.exists()){
+            r = ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; filename=\"" + file.getFilename() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE,MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                    .body(file);
+        }
+        else{
+            r = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+//        System.err.println(r.getHeaders().getContentType());
+        return  r;
+    }
 
     @Data
     @AllArgsConstructor
@@ -221,6 +316,11 @@ public class EpointController extends BaseController{
         vo.setEpTiLastTime(System.currentTimeMillis());
         vo.setEpTiText(epTiText);
         return vo;
+    }
+
+    private String newFileName(Long uId,Long epId,String filename){
+        String append =epId+"_"+ EncryptionUtils.salt()+"_";
+        return append+filename;
     }
 
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwp.travelmemories.repo.mybatis.mappers.EpointMediaMapper">
+
+
+    <resultMap id="epointMiMap" type="com.zwp.travelmemories.comm.vo.EpMediaInfoVo">
+        <id column="ep_mi_id" property="epMiId"/>
+        <result column="u_id" property="uId"/>
+        <result column="ep_id" property="epId"/>
+        <result column="ep_mi_type" property="epMiType"/>
+        <result column="ep_mi_desc" property="epMiDesc"/>
+        <result column="ep_mi_path" property="epMiPath"/>
+    </resultMap>
+
+    <sql id="TABLE_NAME">event_point_media_info</sql>
+
+
+    <select id="selectMediaInfoByEpId" resultMap="epointMiMap">
+        SELECT * FROM
+        <include refid="TABLE_NAME"/>
+        WHERE u_id = #{uId} and ep_id = #{epId}
+    </select>
+
+    <!--  添加事件点并返回自动生成的id   -->
+    <insert id="insertMediaInfo" parameterType="com.zwp.travelmemories.comm.vo.EpMediaInfoVo"
+            keyColumn="ep_mi_id" keyProperty="epMiId" useGeneratedKeys="true">
+        INSERT INTO <include refid="TABLE_NAME"/>
+        (u_id, ep_id,ep_mi_type,ep_mi_path)
+        SELECT
+        #{uId},#{epId},#{epMiType},#{epMiPath}
+        FROM event_point
+        WHERE ep_id = #{epId} and u_id = #{uId}
+    </insert>
+
+    <update id="updateMediaInfoDesc" >
+        UPDATE <include refid="TABLE_NAME"/> SET
+        ep_mi_desc = #{epMiDesc},
+        WHERE
+        ep_mi_id = #{epMiId}
+        and ep_id = #{epId}
+        and u_id = #{uId}
+    </update>
+
+    <update id="deleteMediaInfo">
+        DELETE FROM <include refid="TABLE_NAME"/>
+        WHERE
+        ep_mi_id = #{epMiId}
+        and ep_id = #{epId}
+        and u_id = #{uId}
+    </update>
+
+
+
+</mapper>

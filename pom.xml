@@ -13,7 +13,7 @@
     <groupId>com.zwp.travelmemories</groupId>
     <artifactId>tm</artifactId>
     <version>1.0.0</version>
-    <name>travelmemories</name>
+    <name>tm</name>
     <description>the pom model of travel memories</description>
 
     <properties>
@@ -32,9 +32,6 @@
 
     <dependencyManagement>
         <dependencies>
-
-
-
 
             <dependency>
                 <groupId>com.zwp.travelmemories</groupId>

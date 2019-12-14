@@ -5,7 +5,7 @@
 <mapper namespace="com.zwp.travelmemories.repo.mybatis.mappers.EpTextMapper">
 
 
-    <resultMap id="epointMap" type="com.zwp.travelmemories.comm.vo.EpTextInfoVo">
+    <resultMap id="epointTiMap" type="com.zwp.travelmemories.comm.vo.EpTextInfoVo">
         <id column="ep_ti_id" property="epTiId"/>
         <result column="ep_id" property="epId"/>
         <result column="u_id" property="uId"/>
@@ -15,7 +15,7 @@
 
     <sql id="TABLE_NAME">event_point_text_info</sql>
 
-    <select id="selectTextInfoByEpId" resultMap="epointMap">
+    <select id="selectTextInfoByEpId" resultMap="epointTiMap">
         SELECT * FROM
         <include refid="TABLE_NAME"/>
         WHERE ep_id = #{epId} AND u_id = #{uId}

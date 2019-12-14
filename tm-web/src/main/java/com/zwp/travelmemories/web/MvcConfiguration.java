@@ -2,6 +2,7 @@ package com.zwp.travelmemories.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version: v1.0
  **/
 @Configuration
+@EnableTransactionManagement
 public class MvcConfiguration implements WebMvcConfigurer {
     @Bean
     public UserIdCheckInterceptor userIdCheckInterceptor(){

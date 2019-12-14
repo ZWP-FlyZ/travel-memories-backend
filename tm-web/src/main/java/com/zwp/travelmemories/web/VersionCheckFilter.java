@@ -49,16 +49,19 @@ public class VersionCheckFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse)response;
         String remotev = req.getHeader(Gkeys.C_VERSION_NAME);
         resp.setHeader(Gkeys.C_VERSION_NAME,version);
-        if(remotev==null||!remotev.equals(version)){
+        if(req.getRequestURI().
+                contains("epoint/files"))
+            chain.doFilter(request,response);
+        else if(remotev==null||!remotev.equals(version)){
             LOGGER.debug("c-version check for "+req.getRequestURI()
                     +" not match! cur:{} remote:{}",version,remotev);
             resp.setHeader("Content-Type","application/json");
+
             // 版本不匹配
             try(OutputStream os = resp.getOutputStream()){
                 os.write(errMsg);
                 os.flush();
             }
-
         }else
             // 版本匹配继续执行
             chain.doFilter(request,response);
