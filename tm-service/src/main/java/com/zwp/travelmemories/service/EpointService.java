@@ -143,5 +143,19 @@ public class EpointService {
     }
 
 
+    /**
+     * 删除事件点媒体信息
+     * @param uId
+     * @param epMiId
+     * @param epMiPath
+     * @return 当删除成功返回true，若不存在该事件点或者删除失败返回false
+     */
+    public boolean deleteMediaInfo(Long uId,Long epMiId,String epMiPath){
+        return epointMediaMapper.deleteMediaInfo(uId,epMiId,epMiPath)>0;
+    }
+
+
+
+
 
 }

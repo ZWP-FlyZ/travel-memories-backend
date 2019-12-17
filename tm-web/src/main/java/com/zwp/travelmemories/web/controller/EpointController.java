@@ -9,8 +9,6 @@ import com.zwp.travelmemories.service.StorageService;
 import com.zwp.travelmemories.web.vo.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import net.coobird.thumbnailator.Thumbnailator;
-import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -260,8 +257,33 @@ public class EpointController extends BaseController{
         return rr;
     }
 
-    @GetMapping("/files/{filename:.+}")
+    @GetMapping("/delete_mediainfo")
+    @ResponseBody
+    @Transactional
+    public ResponseResult deleteMediaInfo(HttpServletRequest request,
+                                          Long epMiId,
+                                          String epMiPath)
+                                        throws IOException{
+        ResponseResult<EpMediaInfoVo> rr=null;
+        UserDetailVo user = getCurrentLoginUserInfo();
+        if(epMiId==null||epMiPath==null||
+                epMiPath.equals("")||epMiPath.length()>100){
+            rr = new ResponseResult(ResponseCodes.PARAM_FORMATTING_ERROR,null);
+            LOGGER.debug("delete media info error. format error!");
+        }else {
+            boolean res = epointService.deleteMediaInfo(user.getUid(),epMiId,epMiPath);
+            if(res){
+                storageService.deleteFile(epMiPath,user.getUid());
+            }else
+                LOGGER.debug("delete MediaInfo from database error. ");
+            rr = ResponseResult.success();
+        }
+        return rr;
+    }
 
+
+
+    @GetMapping("/files/{filename:.+}")
     public ResponseEntity<Resource> serveFile(@PathVariable String filename)
             throws FileNotFoundException {
         UserDetailVo user = getCurrentLoginUserInfo();

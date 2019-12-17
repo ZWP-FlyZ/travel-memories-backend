@@ -17,7 +17,7 @@ public interface EpointMediaMapper {
 
     Integer insertMediaInfo(EpMediaInfoVo info);
 
-    Integer deleteMediaInfo(Long uId,Long epId,Long epMiId);
+    Integer deleteMediaInfo(Long uId,Long epMiId,String epMiPath);
 
     Integer updateMediaInfoDesc(Long uId,Long epId,Long epMiId,String epMiDesc);
 

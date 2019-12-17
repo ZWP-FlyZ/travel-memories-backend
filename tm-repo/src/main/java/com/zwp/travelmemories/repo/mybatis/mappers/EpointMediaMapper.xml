@@ -43,13 +43,13 @@
         and u_id = #{uId}
     </update>
 
-    <update id="deleteMediaInfo">
+    <delete id="deleteMediaInfo">
         DELETE FROM <include refid="TABLE_NAME"/>
         WHERE
         ep_mi_id = #{epMiId}
-        and ep_id = #{epId}
         and u_id = #{uId}
-    </update>
+        and ep_mi_path = #{epMiPath}
+    </delete>
 
 
 

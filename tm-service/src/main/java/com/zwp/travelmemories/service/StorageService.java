@@ -1,17 +1,5 @@
 package com.zwp.travelmemories.service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-
 import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +9,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.StreamUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 
 /**
@@ -66,10 +62,33 @@ public class StorageService {
         Files.copy(is, fp, StandardCopyOption.REPLACE_EXISTING);
         if(toPreview){
             Path preview = p.resolve("p-"+filename);
-            Thumbnails.of(fp.toFile()).
-                    scale(0.25).toFile(preview.toFile());
+            Thumbnails.of(fp.toFile()).height(300)
+                    .toFile(preview.toFile());
         }
         return fp.toFile();
+    }
+
+
+    /**
+     * 删除删除文件
+     * @param filename
+     * @param uId
+     * @throws IOException
+     */
+    public void deleteFile(String filename,Long uId) throws IOException {
+        Assert.notNull(filename, "filename is null");
+        Assert.notNull(uId, "uId is null");
+        Path p = checkOrCreateUserPath(uId);
+        Path fp = p.resolve(filename);
+        Path fpp = p.resolve("p-"+filename);
+        if(Files.exists(fp)&&
+                !Files.isDirectory(fp)){
+            Files.delete(fp);
+        }
+        if(Files.exists(fpp)&&
+                !Files.isDirectory(fpp)){
+            Files.delete(fpp);
+        }
     }
 
 
@@ -125,19 +144,6 @@ public class StorageService {
         if(!Files.exists(p)) return null;;
         return p;
     }
-
-
-    /**
-     * 返回所有文件的内存数量总和，单位字节
-     * @param all
-     * @return
-     */
-    private static long getFilesSize(File[] all) {
-        return Arrays.stream(all).
-                filter(f->!f.isDirectory()).
-                mapToLong(File::length).sum();
-    }
-
 
 
 }
