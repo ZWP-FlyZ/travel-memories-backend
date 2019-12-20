@@ -36,10 +36,9 @@
 
     <update id="updateMediaInfoDesc" >
         UPDATE <include refid="TABLE_NAME"/> SET
-        ep_mi_desc = #{epMiDesc},
+        ep_mi_desc = #{epMiDesc}
         WHERE
         ep_mi_id = #{epMiId}
-        and ep_id = #{epId}
         and u_id = #{uId}
     </update>
 

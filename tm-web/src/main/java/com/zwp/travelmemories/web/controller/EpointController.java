@@ -281,6 +281,30 @@ public class EpointController extends BaseController{
         return rr;
     }
 
+    @PostMapping("/setting_mediainfo")
+    @ResponseBody
+    public ResponseResult updateMediaDescription(HttpServletRequest request,
+                                                 Long epMiId,
+                                                 String epMiDesc){
+        ResponseResult rr=null;
+        UserDetailVo user = getCurrentLoginUserInfo();
+        if(epMiId==null||epMiDesc==null||epMiDesc.length()>50){
+            rr = new ResponseResult(ResponseCodes.PARAM_FORMATTING_ERROR,null);
+            LOGGER.debug("update media info description error. format error!");
+        }else{
+            boolean res =
+                    epointService.updateMediaInfoDescription(user.getUid(),epMiId,epMiDesc);
+            if(res){
+                LOGGER.debug("update media info description success. uId:{} epMiId:{}",
+                        user.getUid(),epMiDesc);
+                rr=ResponseResult.success();
+            }else{
+                rr=ResponseResult.failure();
+            }
+        }
+        return rr;
+    }
+
 
 
     @GetMapping("/files/{filename:.+}")

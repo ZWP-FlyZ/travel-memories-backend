@@ -154,8 +154,16 @@ public class EpointService {
         return epointMediaMapper.deleteMediaInfo(uId,epMiId,epMiPath)>0;
     }
 
-
-
+    /**
+     * 更新媒体信息描述
+     * @param uId
+     * @param epMiId
+     * @param epMiDesc
+     * @return
+     */
+    public boolean updateMediaInfoDescription(Long uId,Long epMiId,String epMiDesc){
+        return epointMediaMapper.updateMediaInfoDesc(uId,epMiId,epMiDesc)>0;
+    }
 
 
 }
