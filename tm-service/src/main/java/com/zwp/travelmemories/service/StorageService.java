@@ -62,7 +62,7 @@ public class StorageService {
         Files.copy(is, fp, StandardCopyOption.REPLACE_EXISTING);
         if(toPreview){
             Path preview = p.resolve("p-"+filename);
-            Thumbnails.of(fp.toFile()).height(300)
+            Thumbnails.of(fp.toFile()).height(200)
                     .toFile(preview.toFile());
         }
         return fp.toFile();

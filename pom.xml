@@ -12,7 +12,7 @@
 
     <groupId>com.zwp.travelmemories</groupId>
     <artifactId>tm</artifactId>
-    <version>1.0.0</version>
+    <version>1.5.0</version>
     <name>tm</name>
     <description>the pom model of travel memories</description>
 
@@ -36,20 +36,27 @@
             <dependency>
                 <groupId>com.zwp.travelmemories</groupId>
                 <artifactId>tm-comm</artifactId>
-                <version>0.0.1</version>
+                <version>1.0.0</version>
             </dependency>
 
             <dependency>
                 <groupId>com.zwp.travelmemories</groupId>
                 <artifactId>tm-repo</artifactId>
-                <version>0.0.1</version>
+                <version>1.0.0</version>
             </dependency>
 
             <dependency>
                 <groupId>com.zwp.travelmemories</groupId>
                 <artifactId>tm-service</artifactId>
-                <version>0.0.1</version>
+                <version>1.0.0</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.zwp.travelmemories</groupId>
+                <artifactId>tm-web</artifactId>
+                <version>1.5.0</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>com.alibaba</groupId>
