@@ -314,9 +314,11 @@ public class EpointController extends BaseController{
         ResponseEntity<Resource>  r=null;
         Resource file = storageService.getFile(filename,user.getUid());
         if(file.exists()){
-            r = ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                    "attachment; filename=\"" + file.getFilename() + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE,MediaType.APPLICATION_OCTET_STREAM_VALUE)
+            r = ResponseEntity.ok()
+//                    .header(HttpHeaders.CONTENT_DISPOSITION,
+//                    "attachment; filename=\"" + file.getFilename() + "\"")
+                    .header(HttpHeaders.CACHE_CONTROL,"max-age=1296000") // 15天缓存
+                    .header(HttpHeaders.CONTENT_TYPE,"image/*")
                     .body(file);
         }
         else{

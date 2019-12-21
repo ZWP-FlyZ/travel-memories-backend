@@ -64,6 +64,9 @@ public class StorageService {
             Path preview = p.resolve("p-"+filename);
             Thumbnails.of(fp.toFile()).height(200)
                     .toFile(preview.toFile());
+            preview = p.resolve("mp-"+filename);
+            Thumbnails.of(fp.toFile()).height(800)
+                    .toFile(preview.toFile());
         }
         return fp.toFile();
     }
